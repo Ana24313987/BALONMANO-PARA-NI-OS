@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#FF6B35">
+    <title>¡Aprende Balonmano!</title>
+    
+    <link id="manifest" rel="manifest" href="">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;700;900&display=swap');
+    </style>
+
+    <style>
+        /* =========================================
+           VARIABLES & RESET
+           ========================================= */
+        :root {
+            --c-orange: #FF6B35;
+            --c-yellow: #FFD60A;
+            --c-blue: #1B74E4;
+            --c-green: #2ECC71;
+            --c-red: #E74C3C;
+            --c-bg: #FFF9F0;
+            --c-text: #2B2D42;
+            --font-title: 'Baloo 2', cursive;
+            --font-body: 'Nunito', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 18px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--c-bg);
+            color: var(--c-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+        }
+
+        /* =========================================
+           TYPOGRAPHY & ACCESSIBILITY
+           ========================================= */
+        h1, h2, h3, h4 {
+            font-family: var(--font-title);
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+
+        .sr-only {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+        }
+
+        /* =========================================
+           ANIMATIONS
+           ========================================= */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        /* =========================================
+           LAYOUT & COMPONENTS
+           ========================================= */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        section {
+            width: 100%;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* Hero Title */
+        .title h1 {
+            font-size: 3.5rem;
+            text-align: center;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        /* Mascot & Bubble */
+        .mascot-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .mascot {
+            font-size: 5rem;
+            animation: bounce 2s infinite ease-in-out;
+            display: inline-block;
+        }
+
+        .mascot.wiggle {
+            animation: wiggle 3s infinite ease-in-out;
+        }
+
+        .bubble {
+            background: var(--c-yellow);
+            padding: 1.5rem;
+            border-radius: 20px;
+            position: relative;
+            font-weight: bold;
+            font-size: 1.2rem;
+            max-width: 80%;
+            border: 4px solid var(--c-text);
+        }
+
+        .bubble::after {
+            content: ''; position: absolute; top: -20px; left: 50%;
+            transform: translateX(-50%); border-width: 10px; border-style: solid;
+            border-color: transparent transparent var(--c-text) transparent;
+        }
+
+        /* Central Idea Card */
+        .idea-central {
+            background-color: var(--c-orange);
+            color: white;
+            transform: scale(1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 5px solid var(--c-text);
+        }
+
+        .idea-central:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .idea-central h2 { font-size: 4rem; margin: 0; }
+
+        /* Key Facts Grid */
+        .grid-facts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border: 3px solid var(--c-text);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-emoji { font-size: 3rem; margin-bottom: 0.5rem; }
+        .card h3 { color: var(--c-blue); font-size: 1.5rem; }
+
+        /* Steps Section */
+        .step-list {
+            list-style: none;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .step-item {
+            background: var(--c-bg);
+            margin-bottom: 1rem;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 8px solid var(--c-green);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .step-item:hover {
+            transform: translateX(8px);
+        }
+        
+        .step-number {
+            background: var(--c-green);
+            color: white;
+            font-size: 2rem;
+            font-weight: 900;
+            width: 50px; height: 50px;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* SVG Field */
+        .field-container {
+            width: 100%;
+            background: var(--c-green);
+            border: 5px solid white;
+            border-radius: 10px;
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        .field-container svg { width: 100%; height: auto; }
+
+        /* Big Buttons */
+        .big-button {
+            background-color: var(--c-blue);
+            color: white;
+            border: 4px solid var(--c-text);
+            border-radius: 15px;
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            font-family: var(--font-title);
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 6px 0 var(--c-text);
+            margin: 0.5rem;
+            min-height: 60px;
+        }
+
+        .big-button:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0 var(--c-text);
+        }
+
+        .big-button.correct { background-color: var(--c-green); color: white; box-shadow: 0 6px 0 #27ae60; }
+        .big-button.wrong { background-color: var(--c-red); color: white; box-shadow: 0 6px 0 #c0392b; cursor: not-allowed; }
+
+        /* Quiz Section */
+        #quiz-container {
+            background: var(--c-yellow);
+            border: 4px solid var(--c-text);
+            padding: 2rem;
+            border-radius: 20px;
+        }
+
+        /* Character Buttons */
+        .button--piyo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 3px solid var(--c-text);
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            color: var(--c-text);
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: help;
+            min-height: 50px;
+        }
+
+        /* PWA Banner */
+        #pwa-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(150px);
+            background: var(--c-text);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: transform 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: bold;
+        }
+
+        #pwa-banner.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        #pwa-banner button {
+            background: var(--c-orange);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-family: var(--font-title);
+            cursor: grab;
+        }
+
+        #pwa-banner button:active { cursor: grabbing; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--c-text);
+            color: white;
+            margin-top: 2rem;
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+
+        <header style="text-align: center;">
+            <div class="title">
+                <h1>
+                    <span style="color: var(--c-orange)">¡Ap</span><span style="color: var(--c-yellow)">ren</span><span style="color: var(--c-blue)">de </span><span style="color: var(--c-green)">Balon</span><span style="color: var(--c-red)">mano!</span>
+                </h1>
+            </div>
+            <p style="font-size: 1.2rem; font-weight: bold; color: #666;">Infografía interactiva para niños 🏅</p>
+            
+            <div class="mascot-container">
+                <div class="mascot">🐶</div>
+                <div class="bubble" role="status" aria-live="polite">
+                    ¡Hola! Soy Balón, el perrito deportista. ¡Vamos a aprender juntos sobre un deporte súper rápido y divertido! ¿Estás listo?
+                </div>
+            </div>
+        </header>
+
+        <section id="idea-central" class="idea-central">
+            <h2>¡GOL! 🥅</h2>
+            <p style="font-size: 1.5rem; font-weight: bold;">
+                El objetivo es marcar el mayor número de goles en la portería del equipo adversario. 
+                </p>
+            <p>¡Para lograrlo, tienes que lanzar la pelota usando tus manos!</p>
+        </section>
+
+        <section id="datos-clave">
+            <h2 style="color: var(--c-blue); font-size: 2.5rem;">Datos Curiosos</h2>
+            <div class="grid-facts">
+                <div class="card">
+                    <div class="card-emoji">👥</div>
+                    <h3>7 Jugadores</h3>
+                    <p>
+                        Se juega con siete jugadores en cada equipo en la cancha. ¡Antes se jugaba con 11! 
+                        </p>
+                </div>
+                <div class="card">
+                    <div class="card-emoji">⏱️</div>
+                    <h3>El Tiempo</h3>
+                    <p>
+                        Un partido dura dos tiempos de 30 minutos cada uno. ¡Hay que ser muy rápido! 
+                        </p>
+                </div>
+                <div class="card">
+                    <div class="card-emoji">🖐️</div>
+                    <h3>El Balón</h3>
+                    <p>
+                        Está hecho de cuero y se sujeta fuertemente con las yemas de los dedos. 
+                        </p>
+                </div>
+                <div class="card">
+                    <div class="card-emoji">📜</div>
+                    <h3>La Historia</h3>
+                    <p>
+                        El juego moderno que conocemos se originó en Europa a finales del siglo XIX. 
+                        </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pasos">
+            <h2 style="color: var(--c-green); font-size: 2.5rem;">Pasos para el éxito 🏃‍♂️</h2>
+            <ul class="step-list">
+                <li class="step-item">
+                    <div class="step-number">1</div>
+                    <div>
+                        <strong>Corre y Pasa:</strong> Avanza hacia la portería contraria pasando el balón a tus compañeros.
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-number">2</div>
+                    <div>
+                        <strong>Salta alto:</strong> Los jugadores saltan consiguiendo más longitud y superando a la defensa por alto. 
+                        </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-number">3</div>
+                    <div>
+                        <strong>¡Lanza!:</strong> Tira el balón hacia la red del equipo contrario para marcar.
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <section id="campo">
+            <h2 style="color: var(--c-orange); font-size: 2.5rem;">El Terreno de Juego 🏟️</h2>
+            <p style="margin-bottom: 1rem;">
+                Es una cancha rectangular de 40 metros de largo por 20 metros de ancho. 
+                </p>
+            <div class="field-container" aria-label="Dibujo de una cancha de balonmano de 40 metros por 20 metros">
+                <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="200" fill="#2ECC71" />
+                    <rect x="5" y="5" width="390" height="190" fill="none" stroke="white" stroke-width="3" />
+                    <line x1="200" y1="5" x2="200" y2="195" stroke="white" stroke-width="3" />
+                    <circle cx="200" cy="100" r="15" fill="none" stroke="white" stroke-width="3" />
+                    
+                    <path d="M 5,40 A 60,60 0 0,1 5,160" fill="none" stroke="white" stroke-width="3" />
+                    <path d="M 5,20 A 80,80 0 0,1 5,180" fill="none" stroke="white" stroke-width="2" stroke-dasharray="5,5" />
+                    <line x1="40" y1="95" x2="40" y2="105" stroke="white" stroke-width="3" /> 
+                    <rect x="0" y="80" width="5" height="40" fill="white" /> 
+                    
+                    <path d="M 395,40 A 60,60 0 0,0 395,160" fill="none" stroke="white" stroke-width="3" />
+                    <path d="M 395,20 A 80,80 0 0,0 395,180" fill="none" stroke="white" stroke-width="2" stroke-dasharray="5,5" />
+                    <line x1="360" y1="95" x2="360" y2="105" stroke="white" stroke-width="3" />
+                    <rect x="395" y="80" width="5" height="40" fill="white" />
+                    
+                    <text x="200" y="185" fill="white" font-size="12" font-family="sans-serif" text-anchor="middle" font-weight="bold">40m</text>
+                    <text x="25" y="100" fill="white" font-size="12" font-family="sans-serif" text-anchor="middle" transform="rotate(-90 25,100)" font-weight="bold">20m</text>
+                </svg>
+            </div>
+        </section>
+
+        <section id="portero" style="border: 4px solid var(--c-yellow); background: #FFFFF0;">
+            <div style="font-size: 4rem;">🧤</div>
+            <h2 style="color: var(--c-red); font-size: 2.5rem;">El Jugador Especial: El Portero</h2>
+            <p>
+                Es uno de los jugadores clave. De él depende la seguridad defensiva del equipo. 
+                </p>
+            <p>
+                ¡Incluso defiende la jugada más importante que es el penalti, lanzado desde la línea de 7 metros! 
+                </p>
+        </section>
+
+        <section id="quiz-container">
+            <h2>🕹️ ¡Hora de Jugar!</h2>
+            <p>Demuestra lo que has aprendido. Pregunta <span id="q-num">1</span> de 8.</p>
+            
+            <div id="quiz-question" style="font-size: 1.5rem; font-weight: bold; margin: 1.5rem 0;" aria-live="polite">
+                ¿Cuántos jugadores hay por equipo en la cancha?
+            </div>
+            
+            <div id="quiz-options" style="display: flex; flex-wrap: wrap; justify-content: center;">
+                <button class="big-button" onclick="checkAnswer(false, this)">11 jugadores</button>
+                <button class="big-button" onclick="checkAnswer(true, this)">7 jugadores</button>
+                <button class="big-button" onclick="checkAnswer(false, this)">5 jugadores</button>
+            </div>
+
+            <div id="quiz-feedback" style="margin-top: 1rem; font-weight: bold; font-size: 1.2rem; min-height: 30px;" aria-live="assertive"></div>
+
+            <button class="button--piyo" id="next-btn" style="display: none;" onclick="nextQuestion()">
+                <span class="button__text">SIGUIENTE PREGUNTA ➡️</span>
+            </button>
+        </section>
+
+    </main>
+
+    <footer>
+        <h2>¡Sigue practicando y divirtiéndote! 🏆</h2>
+        <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.3);">
+            <p>Creado por: <strong>Ana Cuadros Valeriano</strong></p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Proyecto de Diseño Instruccional y Desarrollo PWA | 2026</p>
+        </div>
+    </footer>
+
+    <div id="pwa-banner">
+        📲 ¡Instala esta app para jugar sin internet! 
+        <button id="install-btn">Instalar</button>
+    </div>
+
+    <script>
+        // --- 1. QUIZ LOGIC (8 Slides/Questions) ---
+        const questions = [
+            { q: "¿Cuántos jugadores hay por equipo en la cancha?", options: ["11", "7", "5"], correct: 1 },
+            { q: "¿Cuánto dura un tiempo de partido?", options: ["45 min", "15 min", "30 min"], correct: 2 },
+            { q: "¿Cuál es el objetivo principal del juego?", options: ["Marcar goles", "Correr mucho", "Hacer pases"], correct: 0 },
+            { q: "¿Con qué parte del cuerpo se sujeta fuertemente el balón?", options: ["Las palmas", "Las yemas de los dedos", "El pecho"], correct: 1 },
+            { q: "¿Qué forma tiene el terreno de juego?", options: ["Circular", "Cuadrada", "Rectangular"], correct: 2 },
+            { q: "¿Desde qué distancia se lanza un penalti?", options: ["6 metros", "7 metros", "9 metros"], correct: 1 },
+            { q: "¿De qué material está hecho el balón?", options: ["Plástico", "Cuero", "Goma"], correct: 1 },
+            { q: "¿Qué jugador defiende el penalti?", options: ["El portero", "El extremo", "El árbitro"], correct: 0 }
+        ];
+
+        let currentQuestion = 0;
+        const qNumEl = document.getElementById('q-num');
+        const qTextEl = document.getElementById('quiz-question');
+        const optionsContainer = document.getElementById('quiz-options');
+        const feedbackEl = document.getElementById('quiz-feedback');
+        const nextBtn = document.getElementById('next-btn');
+        const mascotBubble = document.querySelector('.bubble');
+        const mascot = document.querySelector('.mascot');
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            qNumEl.innerText = currentQuestion + 1;
+            qTextEl.innerText = q.q;
+            optionsContainer.innerHTML = '';
+            feedbackEl.innerText = '';
+            nextBtn.style.display = 'none';
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'big-button';
+                btn.innerText = opt;
+                btn.style.cursor = 'pointer'; 
+                btn.onclick = () => checkAnswer(index === q.correct, btn);
+                optionsContainer.appendChild(btn);
+            });
+            
+            // Wiggle mascot when a new question loads
+            mascot.classList.add('wiggle');
+            setTimeout(() => mascot.classList.remove('wiggle'), 3000);
+        }
+
+        function checkAnswer(isCorrect, btnElement) {
+            // Disable all buttons
+            Array.from(optionsContainer.children).forEach(b => {
+                b.disabled = true;
+                b.style.opacity = '0.7';
+                b.style.cursor = 'not-allowed';
+            });
+
+            btnElement.style.opacity = '1';
+
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                feedbackEl.innerText = '¡Excelente! 🎉 Respuesta correcta.';
+                feedbackEl.style.color = '#2ECC71';
+                mascotBubble.innerText = "¡Guau! ¡Muy bien hecho! 🐾";
+            } else {
+                btnElement.classList.add('wrong');
+                feedbackEl.innerText = '¡Ups! Inténtalo en la siguiente. ❌';
+                feedbackEl.style.color = '#E74C3C';
+                mascotBubble.innerText = "¡No pasa nada! A seguir aprendiendo. 🐶";
+            }
+
+            nextBtn.style.display = 'inline-flex';
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.querySelector('.button__text').innerText = '¡REPETIR JUEGO! 🔄';
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion >= questions.length) {
+                currentQuestion = 0; // Restart game
+                mascotBubble.innerText = "¡Vamos a repasar otra vez! 🎾";
+            }
+            loadQuestion();
+        }
+
+        // Init Quiz
+        loadQuestion();
+
+        // --- 2. PWA SETUP (Inline Generation) ---
+        const manifestData = {
+            "name": "¡Aprende Balonmano!",
+            "short_name": "Balonmano",
+            "start_url": ".",
+            "display": "standalone",
+            "background_color": "#FFF9F0",
+            "theme_color": "#FF6B35",
+            "description": "Infografía interactiva sobre balonmano para niños.",
+            "icons": [
+                {
+                    "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐶</text></svg>",
+                    "sizes": "192x192",
+                    "type": "image/svg+xml"
+                }
+            ]
+        };
+
+        const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        document.getElementById('manifest').setAttribute('href', manifestURL);
+
+        const swCode = `
+            const CACHE_NAME = 'balonmano-v1';
+            self.addEventListener('install', event => {
+                self.skipWaiting();
+            });
+            self.addEventListener('fetch', event => {
+                event.respondWith(
+                    fetch(event.request).catch(() => {
+                        return new Response('Estás sin conexión, pero la PWA sigue activa.');
+                    })
+                );
+            });
+        `;
+        const swBlob = new Blob([swCode], { type: 'application/javascript' });
+        const swURL = URL.createObjectURL(swBlob);
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register(swURL).then(reg => {
+                    console.log('Service Worker registrado correctamente.');
+                }).catch(err => console.log('Error al registrar SW:', err));
+            });
+        }
+
+        // PWA Install Prompt Logic
+        let deferredPrompt;
+        const pwaBanner = document.getElementById('pwa-banner');
+        const installBtn = document.getElementById('install-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setTimeout(() => {
+                pwaBanner.classList.add('show');
+            }, 3000);
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                pwaBanner.classList.remove('show');
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+            }
+        });
+    </script>
+</body>
+</html>
